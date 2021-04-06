@@ -1,0 +1,10 @@
+{
+  "name": "harity",
+  "version": "1.0.0",
+  "description": "Unique artworks generated through real randomness on chain and wrapped into an Ethereum ERC-721 interface.",
+  "author": "mfbz",
+  "main": "index.js",
+  "scripts": {
+    "scraper": "node ./scripts/scraper.js"
+  }
+}
