@@ -19,8 +19,7 @@ contract Harity {
     bytes constant PREFIX = "data:text/plain;charset=utf-8,";
     uint16 constant EMOJI_COUNT = 948;
 
-    // TODO: Make it work with 2 and update to 8 at the end
-    uint8 constant EMOJI_PER_ROW = 2;
+    uint8 constant EMOJI_PER_ROW = 8;
     uint8 constant BYTES_PER_EMOJI = 4;
     // Where 3 are the bytes for new line charater string
     uint32 constant ROW_SIZE = (EMOJI_PER_ROW * BYTES_PER_EMOJI) + 3;
@@ -89,7 +88,7 @@ contract Harity {
             art[i + 3] = emoji[3];
 
             // Add new line char and increment size of 3 if at the end of the ROW_SIZE
-            if ((i + BYTES_PER_EMOJI + 3) % ROW_SIZE == 0) {
+            if (((i - 30) + BYTES_PER_EMOJI + 3) % ROW_SIZE == 0) {
                 art[i + BYTES_PER_EMOJI] = NEW_LINE[0];
                 art[i + BYTES_PER_EMOJI + 1] = NEW_LINE[1];
                 art[i + BYTES_PER_EMOJI + 2] = NEW_LINE[2];
