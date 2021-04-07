@@ -26,30 +26,23 @@ contract Harity {
     // Squared art plus 30 that is the prefix bytes length
     uint32 constant ART_SIZE = (ROW_SIZE * EMOJI_PER_ROW) + 30;
 
-    function retrieve() public pure returns (string memory) {
-        // This is the number returned from chainlink VRF call
-        uint256 randomNumber =
-            30207470459964961279215818016791723193587102244018403859363363849439350753829;
-
+    function retrieve(uint256 randomNumber)
+        public
+        pure
+        returns (string memory)
+    {
         // Draw using randomNumber to select art emoji
         string memory result = _draw(randomNumber);
         return result;
     }
 
-    function test(uint256 c) public pure returns (string memory) {
-        // This is the number returned from chainlink VRF call
+    function test(uint256 c) public pure returns (uint256) {
         uint256 randomNumber =
             30207470459964961279215818016791723193587102244018403859363363849439350753829;
 
-        // Draw using randomNumber to select art emoji
-        uint256 a = randomNumber % (10000 * (10**c));
-        // Make it in the range from 0 to the EMOJI_COUNT so that it is for sure inside the dictionary as integer
-        uint256 b = a % EMOJI_COUNT;
-        // Multiple by 4 so that it correctly point the starting byte of an emoji
-        uint256 index = b * 4;
+        uint256 v = 0;
 
-        bytes memory emoji = _emoji(index);
-        return string(emoji);
+        return v;
     }
 
     function _draw(uint256 randomNumber) internal pure returns (string memory) {
@@ -65,6 +58,8 @@ contract Harity {
 
         // The counter used to extract part of randomNumber value
         uint256 c = 0;
+        // To avoid repeting consecutive empojis due to truncated 0 like 0100 becoming 100 and being equal to previous number
+        uint256 last = 0;
         for (uint256 i = 30; i < ART_SIZE; i += BYTES_PER_EMOJI) {
             // Cut down randomNumber for next iteration and restart random numbers extraction index c
             if ((c + 4) > d) {
@@ -76,6 +71,13 @@ contract Harity {
             // Extract part of randomNumber depending on n and always > EMOJI_COUNT digits
             // By elevating 10 by n i start from 10000 4th values on the right and go on 1 digit per time to the left
             uint256 a = randomNumber % (10000 * (10**c));
+            // Make sure that this a is different from last one
+            while (a <= last) {
+                a *= 10;
+            }
+            // Save how it was last number to avoid repetitions
+            last = a;
+
             // Make it in the range from 0 to the EMOJI_COUNT so that it is for sure inside the dictionary as integer
             uint256 b = a % EMOJI_COUNT;
             // Multiple by 4 so that it correctly point the starting byte of an emoji
