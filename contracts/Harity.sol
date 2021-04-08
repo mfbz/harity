@@ -1,14 +1,18 @@
-// SPDX-License-Identifier: GPL-3.0
+pragma solidity ^0.8.0;
 
-pragma solidity >=0.7.0 <0.9.0;
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 
-// Hy: To increase the efficiency of the real random number taken from the oracle
+// Hy: To increase the usage efficiency of the real random number taken from the oracle
 // take all the emoji by calculating indexes from it changing the digits considered for the calculations
 // 948 most beautiful and used emojis has been selected among from official Unicode Consortium list
-// The scraper.js script contains how these values have been selected
-contract Harity {
-    string internal constant nftName = "Harity";
-    string internal constant nftSymbol = "H";
+contract Harity is ERC721, Ownable {
+    using SafeMath for uint256;
+    using Counters for Counters.Counter;
+
+    // Constants
 
     // The byte array where each emoji is 4 consecutive emojis
     bytes constant EMOJI_DICTIONARY =
@@ -19,33 +23,57 @@ contract Harity {
     bytes constant PREFIX = "data:text/plain;charset=utf-8,";
     uint16 constant EMOJI_COUNT = 948;
 
-    uint8 constant EMOJI_PER_ROW = 8;
+    uint8 constant EMOJI_PER_ROW = 4;
     uint8 constant BYTES_PER_EMOJI = 4;
     // Where 3 are the bytes for new line charater string
     uint32 constant ROW_SIZE = (EMOJI_PER_ROW * BYTES_PER_EMOJI) + 3;
     // Squared art plus 30 that is the prefix bytes length
     uint32 constant ART_SIZE = (ROW_SIZE * EMOJI_PER_ROW) + 30;
 
-    function retrieve(uint256 randomNumber)
-        public
-        pure
-        returns (string memory)
-    {
+    // Storage
+
+    Counters.Counter private _tokenIds;
+
+    // Constructor
+
+    constructor() ERC721("harity", "HRTY") {}
+
+    // External functions
+
+    function createToken() public onlyOwner returns (uint256) {
+        _tokenIds.increment();
+
+        uint256 newItemId = _tokenIds.current();
+        _mint(msg.sender, newItemId);
+        _setTokenURI(newItemId, tokenURI);
+
+        return newItemId;
+    }
+
+    // TODO
+    function retrieve(uint256 randomNumber) public returns (string memory) {
+        // The id of the token to mint
+        uint256 id = numTokens + 1;
         // Draw using randomNumber to select art emoji
-        string memory result = _draw(randomNumber);
+        string memory result = _draw(id, randomNumber);
+
+        // Increment numTokens counter because it has been issued another one
+        numTokens++;
+
+        // Return the result
         return result;
     }
 
-    function test(uint256 c) public pure returns (uint256) {
-        uint256 randomNumber =
-            30207470459964961279215818016791723193587102244018403859363363849439350753829;
+    // Internal functions
 
-        uint256 v = 0;
+    // TODO
+    function _draw(uint256 tokenId, uint256 randomNumber)
+        internal
+        pure
+        returns (string memory)
+    {
+        // TODO: USE THE TOKEN ID TO COMPLETE POINT 2 OF TODO LIST ON MY PAPER
 
-        return v;
-    }
-
-    function _draw(uint256 randomNumber) internal pure returns (string memory) {
         uint256 d = _digits(randomNumber);
         // The digits must be at least X to matematically get (EMOJI_PER_ROW ** 2) random emoji composing the art from the number
         // Calculated using an inverse formula of the nth triangular number with n = d - 3 and max combination of 64

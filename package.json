@@ -6,5 +6,9 @@
   "main": "index.js",
   "scripts": {
     "scraper": "node ./scripts/scraper.js"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.0.0",
+    "@truffle/hdwallet-provider": "^1.2.6"
   }
 }
