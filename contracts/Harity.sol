@@ -11,15 +11,9 @@ import "./HarityFactory.sol";
 contract Harity is HarityFactory, ERC721, ERC721Enumerable, Ownable {
     using Counters for Counters.Counter;
 
-    // Storage
-
     Counters.Counter private _tokenIds;
 
-    // Constructor
-
     constructor() ERC721("harity", "HRTY") {}
-
-    // External functions
 
     function safeMint(address to, uint256 tokenId) public onlyOwner {
         _safeMint(to, tokenId);
