@@ -157,6 +157,11 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
+"@openzeppelin/contracts@^4.0.0":
+  version "4.0.0"
+  resolved "http://localhost:4873/@openzeppelin%2fcontracts/-/contracts-4.0.0.tgz#54d1de30911635020c383cb73b160b698e7ae179"
+  integrity sha512-UcIJl/vUVjTr3H1yYXZi7Sr2PlXzBEHVUJKOUlVyzyy0FI8oQCCy0Wx+BuK/fojdnmLeMvUk4KUvhKUybP+C7Q==
+
 "@truffle/hdwallet-provider@^1.2.6":
   version "1.2.6"
   resolved "http://localhost:4873/@truffle%2fhdwallet-provider/-/hdwallet-provider-1.2.6.tgz#249cfdb291e9b6ce6f0444a60bc4b0f06e87b627"
@@ -1417,6 +1422,11 @@ precond@0.2:
   version "0.2.3"
   resolved "http://localhost:4873/precond/-/precond-0.2.3.tgz#aa9591bcaa24923f1e0f4849d240f47efc1075ac"
   integrity sha1-qpWRvKokkj8eD0hJ0kD0fvwQdaw=
+
+prettier@^2.2.1:
+  version "2.2.1"
+  resolved "http://localhost:4873/prettier/-/prettier-2.2.1.tgz#795a1a78dd52f073da0cd42b21f9c91381923ff5"
+  integrity sha512-PqyhM2yCjg/oKkFPtTGUojv7gnZAoG80ttl45O6x2Ug/rMJw4wcc9k6aaf2hibP7BGVCCM33gZoGjyvt9mm16Q==
 
 process-nextick-args@~2.0.0:
   version "2.0.1"

@@ -1,14 +1,21 @@
 {
-  "name": "harity",
-  "version": "1.0.0",
-  "description": "Unique artworks generated through real randomness on chain and wrapped into an Ethereum ERC-721 interface.",
-  "author": "mfbz",
-  "main": "index.js",
-  "scripts": {
-    "scraper": "node ./scripts/scraper.js"
-  },
-  "dependencies": {
-    "@openzeppelin/contracts": "^4.0.0",
-    "@truffle/hdwallet-provider": "^1.2.6"
-  }
+	"name": "harity",
+	"version": "1.0.0",
+	"description": "Unique artworks generated through real randomness on chain and wrapped into an Ethereum ERC-721 interface.",
+	"author": "mfbz",
+	"main": "index.js",
+	"scripts": {
+		"contracts:compile": "truffle compile",
+		"contracts:test": "truffle test",
+		"contracts:migrate": "truffle migrate",
+		"contracts:console": "truffle console",
+		"cli:scrape": "node ./cli/scraper.js"
+	},
+	"dependencies": {
+		"@openzeppelin/contracts": "^4.0.0",
+		"@truffle/hdwallet-provider": "^1.2.6"
+	},
+	"devDependencies": {
+		"prettier": "^2.2.1"
+	}
 }
