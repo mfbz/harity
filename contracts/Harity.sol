@@ -42,7 +42,7 @@ contract Harity is
         uint256 newTokenId = _tokenIds.current();
 
         // TODO: Generate the art through token id and a real verifiable random number
-        string memory uri = _draw(newTokenId, 99999999999);
+        string memory uri = _draw(newTokenId, 999999999999999999999);
 
         // Mint the new token using ERC721 contract internal
         _mint(msg.sender, newTokenId);

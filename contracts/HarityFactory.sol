@@ -30,7 +30,7 @@ contract HarityFactory {
         // The digits must be at least X to matematically get (EMOJI_PER_ROW ** 2) random emoji composing the art from the number
         // Calculated using an inverse formula of the nth triangular number with n = d - 3 and max combination of 64
         // TODO: CALCULATE WITH A ROW OF 4 INSTEAD OF 8
-        require(d >= 14);
+        require(d >= 8);
 
         bytes memory art = new bytes(ART_SIZE);
         for (uint256 p = 0; p < 30; p++) {
