@@ -29,6 +29,7 @@ contract('Harity', async (accounts) => {
 		});
 	});
 
+	/*
 	describe('when mint', async () => {
 		it('should create a new token', async () => {
 			const result = await contract.mint();
@@ -42,4 +43,5 @@ contract('Harity', async (accounts) => {
 			assert.equal(event.to, owner);
 		});
 	});
+	*/
 });

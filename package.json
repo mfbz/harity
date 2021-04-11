@@ -12,6 +12,7 @@
 		"cli:scrape": "node ./cli/scraper.js"
 	},
 	"dependencies": {
+		"@chainlink/contracts": "^0.1.7",
 		"@openzeppelin/contracts": "^4.0.0",
 		"@truffle/hdwallet-provider": "^1.2.6"
 	},

@@ -18,52 +18,38 @@ contract HarityFactory {
     // Squared art plus 30 that is the prefix bytes length
     uint32 internal constant ART_SIZE = (ROW_SIZE * EMOJI_PER_ROW) + 30;
 
-    // TODO
-    function _draw(uint256 tokenId, uint256 randomNumber)
+    /// Return a data uri with the art that has the first emoji depending on tokenId and
+    /// all the others generated randomly through randomness
+    function _draw(uint256 tokenId, uint256 randomness)
         internal
         pure
         returns (string memory)
     {
-        // TODO: USE THE TOKEN ID TO COMPLETE POINT 2 OF TODO LIST ON MY PAPER
-
-        uint256 d = _digits(randomNumber);
-        // The digits must be at least X to matematically get (EMOJI_PER_ROW ** 2) random emoji composing the art from the number
-        // Calculated using an inverse formula of the nth triangular number with n = d - 3 and max combination of 64
-        // TODO: CALCULATE WITH A ROW OF 4 INSTEAD OF 8
-        require(d >= 8);
-
         bytes memory art = new bytes(ART_SIZE);
+        // Fill artwork with initial data uri prefix
         for (uint256 p = 0; p < 30; p++) {
             art[p] = PREFIX[p];
         }
 
-        // The counter used to extract part of randomNumber value
+        // Add the first emoji that depends on token id, * 4 because in dictionary each emoji is 4 bytes
+        bytes memory tokenEmoji = _emoji(tokenId * 4);
+        art[30] = tokenEmoji[0];
+        art[31] = tokenEmoji[1];
+        art[32] = tokenEmoji[2];
+        art[33] = tokenEmoji[3];
+
+        // The number of emojis that have been added
         uint256 c = 0;
-        // To avoid repeting consecutive empojis due to truncated 0 like 0100 becoming 100 and being equal to previous number
-        uint256 last = 0;
-        for (uint256 i = 30; i < ART_SIZE; i += BYTES_PER_EMOJI) {
-            // Cut down randomNumber for next iteration and restart random numbers extraction index c
-            if ((c + 4) > d) {
-                // Slice down random number by 10 and set c to 0 for next random iteration on it
-                randomNumber /= 10;
-                c = 0;
-            }
-
-            // Extract part of randomNumber depending on n and always > EMOJI_COUNT digits
-            // By elevating 10 by n i start from 10000 4th values on the right and go on 1 digit per time to the left
-            uint256 a = randomNumber % (10000 * (10**c));
-            // Make sure that this a is different from last one
-            while (a <= last) {
-                a *= 10;
-            }
-            // Save how it was last number to avoid repetitions
-            last = a;
-
-            // Make it in the range from 0 to the EMOJI_COUNT so that it is for sure inside the dictionary as integer
-            uint256 b = a % EMOJI_COUNT;
+        // Add all the other emojis randomnly generated from randomness starting from last index
+        for (uint256 i = 34; i < ART_SIZE; i += BYTES_PER_EMOJI) {
+            // Calculate another random number from randomness for each emoji
+            uint256 currentRandomness =
+                uint256(keccak256(abi.encode(randomness, c)));
+            // Make it in the range from 0 to the EMOJI_COUNT so that it is for sure inside the dictionary
             // Multiple by 4 so that it correctly point the starting byte of an emoji
-            uint256 index = b * 4;
+            uint256 index = (currentRandomness % EMOJI_COUNT) * 4;
 
+            // Get the emoji selected by the index found randomly
             bytes memory emoji = _emoji(index);
             art[i] = emoji[0];
             art[i + 1] = emoji[1];
@@ -71,15 +57,12 @@ contract HarityFactory {
             art[i + 3] = emoji[3];
 
             // Add new line char and increment size of 3 if at the end of the ROW_SIZE
-            if (((i - 30) + BYTES_PER_EMOJI + 3) % ROW_SIZE == 0) {
+            if (((i - 34) + BYTES_PER_EMOJI + 3) % ROW_SIZE == 0) {
                 art[i + BYTES_PER_EMOJI] = NEW_LINE[0];
                 art[i + BYTES_PER_EMOJI + 1] = NEW_LINE[1];
                 art[i + BYTES_PER_EMOJI + 2] = NEW_LINE[2];
                 i += 3;
             }
-
-            // Increment extractor counter for next iteration
-            c++;
         }
 
         string memory result = string(art);
@@ -97,14 +80,5 @@ contract HarityFactory {
         output[3] = EMOJI_DICTIONARY[index + 3];
 
         return output;
-    }
-
-    function _digits(uint256 number) private pure returns (uint8) {
-        uint8 digits = 0;
-        while (number != 0) {
-            number /= 10;
-            digits++;
-        }
-        return digits;
     }
 }
